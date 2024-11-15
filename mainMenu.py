@@ -68,11 +68,7 @@ def start_game(character_name):
 
     # Boucle principale du jeu
     while running:
-
-        if missed_balls >= 10:
-            # Doto display here create a game over page 
-            main_menu()
-
+            
         frames += 1
 
         if frames % 60 == 0:
@@ -103,10 +99,20 @@ def start_game(character_name):
         # Supprimer les boules invisibles et ajouter une nouvelle boule si nécessaire
         for ball in balls[:]:
             if not ball.visible:
+             
+                missed_balls += 1  # Incrémente seulement si la balle est manquée
+
+                # Retirez la balle actuelle et ajoutez une nouvelle
                 balls.remove(ball)
                 balls.append(DirectedBall(WIDTH, HEIGHT, ball_radius))
-                missed_balls += 1  # Increment missed ball counter
+
+            #Augmentez la vitesse des balles
             ball.speed += speedball ** 2
+        # Condition de Game Over
+        
+        if missed_balls - score.value >= 10:
+            display_message("Game Over!", "Red", (WIDTH // 2, HEIGHT // 2), 2000)
+            main_menu()
 
         # Remplissage de l'arrière-plan
         SCREEN.fill(BACKGROUND_COLOR)
